@@ -22,8 +22,8 @@ def playFunc():
     """
     play.grid_forget()
     quit.grid_forget()
-    instructions.grid(row=3, column=1)  #adding instructions on screen
-    instructions_label.grid(row=4, column=0, columnspan=3)
+    instructions.grid(row=3, column=1, pady=20)  #adding instructions on screen
+    instructions_label.grid(row=4, column=0, columnspan=3, pady=20)
     grid_label.grid(row=5, column=1, rowspan=2)     #adding the grid for key inputs
     quit.grid(row=5, column=0, padx=20)     #quit button
     next.grid(row=5, column=2, padx=20)     #next button
@@ -36,17 +36,16 @@ def level():
     """
     global level_no
     instructions.grid_forget()
+    instructions_label.grid_forget()
+    grid_label.grid_forget()
     quit.grid_forget()
     next.grid_forget()
-    level_label = tk.Label(root, text="Level-"+ str(level_no) +"")
     level_label.grid(row=0, column=0)                               #label to display level number
-    melody = tk.Button(root, text="Melody", command=melodyFunc)
     melody.grid(row=2, column=0)                                    #button for playing melody
-    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2)      #adding the sitar on the screen
-    practice_bn = tk.Button(root, text="Practice", command=practice)#button to enter practice mode, user input is not added to the list
+    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2, pady=20)      #adding the sitar on the screen
     practice_bn.grid(row=0, column=2)                               #calls practice function
-    record_bn = tk.Button(root, text="Record", command=record)      #button to enter record mode, user input is added to the list
-    record_bn.grid(row=2, column=2)                                 #calls record function
+    record_bn.grid(row=1, column=2)                                 #calls record function
+    quit.grid(row=2, column=2)
 
 def next_lvl():
     """
@@ -56,17 +55,14 @@ def next_lvl():
     global level_no
     next_level.grid_forget()
     win_label.grid_forget()
-    level_label = tk.Label(root, text="Level-" + str(level_no) + "")    #label to display level number
     level_label.grid(row=0, column=0)
-    melody = tk.Button(root, text="Melody", command=melodyFunc)         #melody button
     melody.grid(row=2, column=0)
-    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2)          #adding sitar on screen
-    practice_bn = tk.Button(root, text="Practice", command=practice)    #practice button
+    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2, pady=20)          #adding sitar on screen
     practice_bn.grid(row=0, column=2)
-    record_bn = tk.Button(root, text="Record", command=record)          #record button
-    record_bn.grid(row=2, column=2)
+    record_bn.grid(row=1, column=2)
+    quit.grid(row=2, column=2)
     if level_no > 3:                                                    #if all levels are completed, close the mainloop
-        root.destroy()
+        finish()
 
 
 def melodyFunc():
@@ -89,7 +85,6 @@ def practice():
     """
     global entry1
     list1.clear()
-    entry1 = tk.Entry(root)
     entry1.bind("<Key>", notes)     #calling 'notes' function
     entry1.focus()
     entry1.grid(row=5, column=0)
@@ -135,15 +130,12 @@ def record():
     elif level_no == 2:
         song = [9, 0, 9, 8, 7, 6, 8, 7, 5, 4, 7, 3, 2]
     elif level_no == 3:
-        song = [3,6,7,8,6,7,8,6,7,8,9,8,9,0,8,6,9,7,5,9]
+        song = [3, 6, 7, 8, 6, 7, 8, 6, 7, 8, 9, 8, 9, 0, 8, 6, 9, 7, 5, 9]
     else:
         pass
-    entry1 = tk.Entry(root)
     entry1.bind("<Key>", notes_record)      #calling 'notes_record' function
     entry1.focus()
     entry1.grid(row=5, column=0)
-
-
 
 
 def notes_record(event):
@@ -195,17 +187,44 @@ def notes_record(event):
             list1.clear()                       #list1 is cleared for the next level
             level_no += 1                       #level number incremented by 1
             song.clear()                        #song list is cleared for the next level
-            win_label.grid(row=5, column=2)     #lebel to denote that the player won
-            next_level.grid(row=6, column=2)    #button for moving on to the next level
+            win_label.grid(row=5, column=1)     #lebel to denote that the player won
+            next_level.grid(row=5, column=2)    #button for moving on to the next level
         else:
             pass
     elif len(list1)>len(song):                  #if length of list1 exceeds length of song, user has to try again
-        try_again_label.grid(row=5, column=2)
+        try_again_label.grid(row=5, column=1)
         list1.clear()
     else:
         pass
 
     entry1.delete(0, 'end')
+
+def finish():
+    """
+    Called when level number exceeds 3
+    Displays song names
+    """
+    next_level.grid_forget()
+    win_label.grid_forget()
+    practice_bn.grid_forget()
+    record_bn.grid_forget()
+    melody.grid_forget()
+    entry1.grid_forget()
+    sitar_label.grid_forget()
+    level_label.grid_forget()
+    quit.grid_forget()
+    try:
+        try_again_label.grid_forget()
+    except:
+        pass
+    win = tk.Label(root, text="Congratualtions!!! You have successfully completed the game!!!")
+    win.grid(row=3, column=1, pady=20)
+    song_names = tk.Label(root, text="Songs Used in the Game")
+    song_names.grid(row=4, column=1, pady=20)
+    songs = tk.Label(root, text="1) The Beatles - Here Comes the Sun\n2) The Beatles - Norwegian Wood\n3) The Beatles - While My Guitar Gently Weeps")
+    songs.grid(row=5, column=1, pady=20)
+    quit.grid(row=6, column=1)
+
 
 
 play = tk.Button(root, text="PLAY", command=playFunc)   #play button
@@ -215,10 +234,17 @@ quit = tk.Button(root, text="QUIT", command=root.quit)  #quit button
 quit.grid(row=4, column=1, pady=20)
 
 instructions = tk.Label(root, text="Instructions", bg='#fffefa')  #instruction for the 2nd dialog
-instructions_label = tk.Label(root, text="1) For each level you can first hear the melody by clicking the 'melody' button.\n2) Once you have heard the melody you can try to figure out the notes and sequence out of the given notes by clicking the 'practice' button.\n3) Once you have the sequence, you can click 'record' and play the melody.\n4) Use number keys to play notes as shown in the grid below.", bg='#fffefa')
+instructions_label = tk.Label(root, text="1) Press the “melody” button to listen to the melody.\n2) Use number keys as shown in the grid below to play the melody.\n3) Press the “practice” button to figure out the sequence of the melody.\n4) Press the “record” button to play the final melody.", bg='#fffefa')
 
 grid_notes = ImageTk.PhotoImage(Image.open("images/grid_instructions.png"))     #grid for representing keys and notes
 grid_label = tk.Label(image=grid_notes)
+
+practice_bn = tk.Button(root, text="Practice", command=practice)    #button to enter practice mode, user input is not added to the list
+record_bn = tk.Button(root, text="Record", command=record)          #button to enter record mode, user input is added to the list
+melody = tk.Button(root, text="Melody", command=melodyFunc)         #melody button
+entry1 = tk.Entry(root)                                             #entry widget for user input
+
+level_label = tk.Label(root, text="Level-" + str(level_no) + "")    #label to display level number
 
 next = tk.Button(root, text="NEXT", command=level)              #next button for instructions dialog
 next_level = tk.Button(root, text="NEXT", command=next_lvl)     #next button for level dialog

@@ -34,17 +34,18 @@ def level():
     It comes up when the player hits "next" on the instructions dialog
     It removes everything from the instructions dialog except for the grid and logo
     """
-    global level_no
+    global level_no, level_label
     instructions.grid_forget()
     instructions_label.grid_forget()
     grid_label.grid_forget()
     quit.grid_forget()
     next.grid_forget()
-    level_label.grid(row=0, column=0)                               #label to display level number
-    melody.grid(row=2, column=0)                                    #button for playing melody
-    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2, pady=20)      #adding the sitar on the screen
-    practice_bn.grid(row=0, column=2)                               #calls practice function
-    record_bn.grid(row=1, column=2)                                 #calls record function
+    level_label = tk.Label(root, text="Level-" + str(level_no) + "")        # label to display level number
+    level_label.grid(row=0, column=0)                                       #label to display level number
+    melody.grid(row=2, column=0)                                            #button for playing melody
+    sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2, pady=20)     #adding the sitar on the screen
+    practice_bn.grid(row=0, column=2)                                       #calls practice function
+    record_bn.grid(row=1, column=2)                                         #calls record function
     quit.grid(row=2, column=2)
 
 def next_lvl():
@@ -52,9 +53,11 @@ def next_lvl():
     function to move on to next level
     called when user presses "next" after completing a level
     """
-    global level_no
+    global level_no, level_label
     next_level.grid_forget()
     win_label.grid_forget()
+    level_label.grid_forget()
+    level_label = tk.Label(root, text="Level-" + str(level_no) + "")  # label to display level number
     level_label.grid(row=0, column=0)
     melody.grid(row=2, column=0)
     sitar_label.grid(row=3, column=0, columnspan=3, rowspan=2, pady=20)          #adding sitar on screen
@@ -242,9 +245,9 @@ grid_label = tk.Label(image=grid_notes)
 practice_bn = tk.Button(root, text="Practice", command=practice)    #button to enter practice mode, user input is not added to the list
 record_bn = tk.Button(root, text="Record", command=record)          #button to enter record mode, user input is added to the list
 melody = tk.Button(root, text="Melody", command=melodyFunc)         #melody button
-entry1 = tk.Entry(root)                                             #entry widget for user input
+entry1 = tk.Entry(root, width=5)                                    #entry widget for user input
 
-level_label = tk.Label(root, text="Level-" + str(level_no) + "")    #label to display level number
+#level_label = tk.Label(root, text="Level-" + str(level_no) + "")    #label to display level number
 
 next = tk.Button(root, text="NEXT", command=level)              #next button for instructions dialog
 next_level = tk.Button(root, text="NEXT", command=next_lvl)     #next button for level dialog
